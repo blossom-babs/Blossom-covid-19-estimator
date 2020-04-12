@@ -9,20 +9,30 @@ const covid19ImpactEstimator = () => {
     avgDailyIncomePopulation: 0.73
   };
 
-  const timeElapsed = Math.floor(data.timeToElapse / 3);
-  const income = Math.floor(0.65 * (data.population / data.avgDailyIncomePopulation));
+
+  if (data.periodType === 'days') {
+    timeElapsed = Math.trunc(data.timeToElapse / 3);
+  } else if (data.periodType === 'weeks') {
+    timeElapsed = Math.trunc((data.timeToElapse * 7) / 3);
+  } else if (data.periodType === 'months') {
+    timeElapsed = Math.trunc((data.timeToElapse * 30) / 3);
+  }
+
+
+  const income = Math.trunc(0.65 * (data.population / data.avgDailyIncomePopulation));
 
   const currentlyInfected = data.reportedCases * 10;
   const infectionsByRequestedTime = currentlyInfected * (2 ** timeElapsed);
   const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+  const availableBeds = 0.35 * data.totalHospitalBeds;
 
   const impact = {
     currentlyInfected,
     infectionsByRequestedTime,
     severeCasesByRequestedTime,
     hospitalBedsByRequestedTime: data.totalHospitalBeds - severeCasesByRequestedTime,
-    casesForICUByRequestedTime: 0.05 * infectionsByRequestedTime,
-    casesForVentilatorsByRequestedTime: Math.floor(0.02 * infectionsByRequestedTime),
+    casesForICUByRequestedTime: Math.trunc(availableBeds * infectionsByRequestedTime),
+    casesForVentilatorsByRequestedTime: Math.trunc(0.02 * infectionsByRequestedTime),
     dollarsInFight: (infectionsByRequestedTime * income * data.avgDailyIncomeInUSD) / 30
 
   };
@@ -35,7 +45,7 @@ const covid19ImpactEstimator = () => {
     currentlyInfected: siCurrentlyInfected,
     infectionsByRequestedTime: siInfectionsByRequestedTime,
     severeCasesByRequestedTime: siSevereCasesByRequestedTime,
-    hospitalBedsByRequestedTime: data.totalHospitalBeds - siSevereCasesByRequestedTime,
+    hospitalBedsByRequestedTime: Math.trunc(availableBeds - siSevereCasesByRequestedTime),
     casesForICUByRequestedTime: 0.05 * siInfectionsByRequestedTime,
     casesForVentilatorsByRequestedTime: 0.02 * siInfectionsByRequestedTime,
     dollarsInFight: (siInfectionsByRequestedTime * income * data.avgDailyIncomeInUSD) / 30
