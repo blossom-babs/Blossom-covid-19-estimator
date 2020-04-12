@@ -1,13 +1,5 @@
-const covid19ImpactEstimator = () => {
-  const data = {
-    reportedCases: 2747,
-    periodType: 'days',
-    timeToElapse: 38,
-    totalHospitalBeds: 678874,
-    avgDailyIncomeInUSD: 4,
-    population: 92931687,
-    avgDailyIncomePopulation: 0.73
-  };
+const covid19ImpactEstimator = (data) => {
+  const input = data;
 
   let timeElapsed;
   if (data.periodType === 'days') {
@@ -53,12 +45,26 @@ const covid19ImpactEstimator = () => {
 
 
   return {
-    data: JSON.stringify(data),
+    data: JSON.stringify(input),
     impact: JSON.stringify(impact),
     severeImpact: JSON.stringify(severeImpact)
 
   };
 };
 
-covid19ImpactEstimator();
+const data = {
+  region: {
+    name: 'Africa',
+    avgAge: 19.7,
+    avgDailyIncomeInUSD: 4,
+    avgDailyIncomePopulation: 0.73
+  },
+  periodType: 'days',
+  timeToElapse: 38,
+  reportedCases: 2747,
+  population: 92931687,
+  totalHospitalBeds: 678874
+};
+
+covid19ImpactEstimator(data);
 export default covid19ImpactEstimator;
