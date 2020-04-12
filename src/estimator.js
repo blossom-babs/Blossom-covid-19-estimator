@@ -9,7 +9,7 @@ const covid19ImpactEstimator = () => {
     avgDailyIncomePopulation: 0.73
   };
 
-
+  let timeElapsed;
   if (data.periodType === 'days') {
     timeElapsed = Math.trunc(data.timeToElapse / 3);
   } else if (data.periodType === 'weeks') {
@@ -20,8 +20,8 @@ const covid19ImpactEstimator = () => {
 
 
   const income = Math.trunc(0.65 * (data.population / data.avgDailyIncomePopulation));
-
   const currentlyInfected = data.reportedCases * 10;
+
   const infectionsByRequestedTime = currentlyInfected * (2 ** timeElapsed);
   const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
   const availableBeds = 0.35 * data.totalHospitalBeds;
