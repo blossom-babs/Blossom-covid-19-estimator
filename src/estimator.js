@@ -1,20 +1,24 @@
 const covid19ImpactEstimator = (data) => {
   const input = data;
 
-  let timeElapsed;
-  if (data.periodType === 'days') {
-    timeElapsed = Math.trunc(data.timeToElapse / 3);
-  } else if (data.periodType === 'weeks') {
-    timeElapsed = Math.trunc((data.timeToElapse * 7) / 3);
-  } else if (data.periodType === 'months') {
-    timeElapsed = Math.trunc((data.timeToElapse * 30) / 3);
-  }
+  const timeElapsed = (periodType, timeToElapse) => {
+    if (periodType === 'days') {
+      return Math.trunc(timeToElapse / 3);
+    }
+    if (periodType === 'weeks') {
+      return Math.trunc((timeToElapse * 7) / 3);
+    }
+    if (periodType === 'months') {
+      return Math.trunc((timeToElapse * 30) / 3);
+    }
+    return null;
+  };
 
 
   const income = Math.trunc(0.65 * (data.population / data.avgDailyIncomePopulation));
   const currentlyInfected = data.reportedCases * 10;
 
-  const infectionsByRequestedTime = currentlyInfected * (2 ** timeElapsed);
+  const infectionsByRequestedTime = currentlyInfected * (2 ** (timeElapsed('days', 38)));
   const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
   const availableBeds = 0.35 * data.totalHospitalBeds;
 
@@ -32,7 +36,7 @@ const covid19ImpactEstimator = (data) => {
   };
 
   const siCurrentlyInfected = data.reportedCases * 50;
-  const siInfectionsByRequestedTime = siCurrentlyInfected * (2 ** timeElapsed);
+  const siInfectionsByRequestedTime = siCurrentlyInfected * (2 ** (timeElapsed('days', 38)));
   const siSevereCasesByRequestedTime = 0.15 * siInfectionsByRequestedTime;
 
   const severeImpact = {
