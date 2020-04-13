@@ -18,6 +18,8 @@ const covid19ImpactEstimator = (data) => {
   const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
   const availableBeds = 0.35 * data.totalHospitalBeds;
 
+  const estimate = [];
+
   const impact = {
     currentlyInfected,
     infectionsByRequestedTime,
@@ -43,6 +45,7 @@ const covid19ImpactEstimator = (data) => {
     dollarsInFight: (siInfectionsByRequestedTime * income * data.avgDailyIncomeInUSD) / 30
   };
 
+  estimate.push({ impact, severeImpact });
 
   return {
     data: JSON.stringify(input),
