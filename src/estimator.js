@@ -52,6 +52,7 @@ const covid19ImpactEstimator = (data) => {
 };
 
 // Production
+
 export default covid19ImpactEstimator;
 
 // Development Environment Only
