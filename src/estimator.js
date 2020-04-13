@@ -11,7 +11,6 @@ const covid19ImpactEstimator = (data) => {
     }
     return null;
   };
-  
   const timeElapsed = calculateTimeElapsed(data.periodType, data.timeToElapse);
 
   const factor = Math.trunc(timeElapsed / 3);
@@ -70,4 +69,4 @@ const data = {
   totalHospitalBeds: 678874
 };
 
-console.log(JSON.stringify(covid19ImpactEstimator(data), null, 2));
+JSON.stringify(covid19ImpactEstimator(data), null, 2);
